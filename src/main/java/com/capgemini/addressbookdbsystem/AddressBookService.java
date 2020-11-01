@@ -1,7 +1,9 @@
 package com.capgemini.addressbookdbsystem;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 public class AddressBookService {
@@ -9,6 +11,7 @@ public class AddressBookService {
 	private static Logger log = Logger.getLogger(AddressBookService.class.getName());
 
 	private List<Contact> contactList;
+	private Map<String,Integer> countByCityOrState;
 	private AddressBookDBService addressBookDBService;
 	
 	public AddressBookService() {
@@ -29,6 +32,12 @@ public class AddressBookService {
 	// Reading and returning list of contact for date range from DB
 	public List<Contact> readContactForDateRange(LocalDate startDate, LocalDate endDate) throws AddressBookSystemException {
 		return addressBookDBService.getcontactDataByDate(startDate,endDate);
+	}
+	
+	// Reading and returning contact by city or state
+	public Map<String, Integer> readContactByCityOrState() throws AddressBookSystemException {
+		this.countByCityOrState = addressBookDBService.getcontactDataByCityOrState();
+		return this.countByCityOrState;
 	}
 	
 	// Getting contact data from POJO class

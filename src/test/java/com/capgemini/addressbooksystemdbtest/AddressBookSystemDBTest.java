@@ -2,6 +2,7 @@ package com.capgemini.addressbooksystemdbtest;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import org.junit.Assert;
@@ -20,10 +21,10 @@ public class AddressBookSystemDBTest {
 	public void contactsRetrievedFromDB_MatchCount() throws AddressBookSystemException {
 		AddressBookService addressBookService = new AddressBookService();
 		List<Contact> contactList = addressBookService.readDataFromDB();
-		Assert.assertEquals(3, contactList.size());
+		Assert.assertEquals(4, contactList.size());
 		log.info("Entries from database count matched successfully!");
 	}
-	
+
 	// Update contact should sync with DB
 	@Test
 	public void contactUpdated_SyncWithDB() throws AddressBookSystemException {
@@ -34,8 +35,7 @@ public class AddressBookSystemDBTest {
 		Assert.assertTrue(result);
 		log.info("Update contact in sync with DB tested successfully!");
 	}
-	
-	
+
 	// Match contact count when retrieved for DB
 	@Test
 	public void contactsRetrievedForDateRange_MatchCount() throws AddressBookSystemException {
@@ -46,6 +46,21 @@ public class AddressBookSystemDBTest {
 		List<Contact> contactList = addressBookService.readContactForDateRange(startDate, endDate);
 		Assert.assertEquals(2, contactList.size());
 		log.info("Retrieve contact for date range from DB count matched successfully!");
+	}
+
+	// Match count of contact when retrieved from DB using city or state
+	@Test
+	public void contactsRetrieved_NumberOfContacts_ByCityOrState() throws AddressBookSystemException {
+		AddressBookService addressBookService = new AddressBookService();
+		addressBookService.readDataFromDB();
+		Map<String, Integer> contactCountByCityOrState = addressBookService.readContactByCityOrState();
+		Assert.assertTrue(contactCountByCityOrState.get("Lucknow").equals(1)
+				&& contactCountByCityOrState.get("Mumbai").equals(1)
+				&& contactCountByCityOrState.get("Meerut").equals(1)
+				&& contactCountByCityOrState.get("Patna").equals(1)
+				&& contactCountByCityOrState.get("Bihar").equals(1)
+				&& contactCountByCityOrState.get("Maharashtra").equals(1)
+				&& contactCountByCityOrState.get("Uttar Pradesh").equals(2));
 	}
 
 }
