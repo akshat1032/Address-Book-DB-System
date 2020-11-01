@@ -1,14 +1,27 @@
 package com.capgemini.addressbookdbsystem;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 public class AddressBookService {
 
 	private static Logger log = Logger.getLogger(AddressBookService.class.getName());
 
-	public static void main(String[] args) {
+	private List<Contact> contactList;
+	private AddressBookDBService addressBookDBService;
+	
+	public AddressBookService() {
+		addressBookDBService = AddressBookDBService.getInstance();
+	}
 
-		// Welcome message added
-		log.info("Welcome to Address Book Database Connectivity");
+	public AddressBookService(List<Contact> contactList) {
+		this();
+		this.contactList = contactList;
+	}
+	
+	// Reading and returning list of contact from DB
+	public List<Contact> readDataFromDB() throws AddressBookSystemException {
+		contactList = addressBookDBService.readDataFromDB();
+		return contactList;
 	}
 }
