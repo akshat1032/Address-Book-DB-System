@@ -140,8 +140,8 @@ public class AddressBookDBService {
 				String address = resultSet.getString("address");
 				String city = resultSet.getString("city");
 				String state = resultSet.getString("state");
-				String zip = resultSet.getString("zip");
-				String phoneNumber = resultSet.getString("phone");
+				long zip = resultSet.getLong("zip");
+				long phoneNumber = resultSet.getLong("phone");
 				String email = resultSet.getString("email");
 				String addressBookName = resultSet.getString("addressbookname");
 				String addressBookType = resultSet.getString("type");
@@ -170,5 +170,66 @@ public class AddressBookDBService {
 		} catch (SQLException e) {
 			throw new AddressBookSystemException("Error in updating contact using prepared statement");
 		}
+	}
+
+	public Contact addContactToDb(String firstName, String lastName, String address, String city, String state,
+			long zip, long phone, String email, String addressBookName, String addressBookType, LocalDate dateAdded)
+			throws AddressBookSystemException {
+		Connection connection = null;
+		try {
+			connection = this.getConnection();
+			connection.setAutoCommit(false);
+		} catch (SQLException e) {
+			throw new AddressBookSystemException("Error in establising connection for adding to database");
+		}
+
+		try {
+			Statement statement = connection.createStatement();
+			String query = String.format(
+					"insert into contact values ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')", firstName,
+					lastName, address, city, state, zip, phone, email, addressBookName, dateAdded);
+			statement.executeUpdate(query);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			try {
+				connection.rollback();
+			} catch (SQLException e1) {
+				throw new AddressBookSystemException("Error in inserting record to Contact table");
+			}
+		}
+//		Error in this part of the code : I want to check for duplicates before entry, gives exception
+		try {
+			Statement statement = connection.createStatement();
+			String query = String.format("insert into addressbook(addressbookname,type) VALUES ('%s','%s');",
+					addressBookName, addressBookType);
+			ResultSet resultSetAddressBook = statement.executeQuery("select * from addressbook");
+			String key = resultSetAddressBook.get("addressbookname");
+			System.out.println(key);
+			if (!key.contains(addressBookName))
+				statement.executeUpdate(query);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			try {
+				connection.rollback();
+			} catch (SQLException e2) {
+				throw new AddressBookSystemException("Error in inserting record to AddressBook table");
+			}
+		}
+
+		try {
+			connection.commit();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return new Contact(firstName, lastName, address, city, state, zip, phone, email, addressBookName,
+				addressBookType, dateAdded);
 	}
 }

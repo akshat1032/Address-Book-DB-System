@@ -21,7 +21,7 @@ public class AddressBookSystemDBTest {
 	public void contactsRetrievedFromDB_MatchCount() throws AddressBookSystemException {
 		AddressBookService addressBookService = new AddressBookService();
 		List<Contact> contactList = addressBookService.readDataFromDB();
-		Assert.assertEquals(4, contactList.size());
+		Assert.assertEquals(5, contactList.size());
 		log.info("Entries from database count matched successfully!");
 	}
 
@@ -44,7 +44,7 @@ public class AddressBookSystemDBTest {
 		LocalDate startDate = LocalDate.of(2018, 01, 01);
 		LocalDate endDate = LocalDate.now();
 		List<Contact> contactList = addressBookService.readContactForDateRange(startDate, endDate);
-		Assert.assertEquals(2, contactList.size());
+		Assert.assertEquals(3, contactList.size());
 		log.info("Retrieve contact for date range from DB count matched successfully!");
 	}
 
@@ -56,11 +56,24 @@ public class AddressBookSystemDBTest {
 		Map<String, Integer> contactCountByCityOrState = addressBookService.readContactByCityOrState();
 		Assert.assertTrue(contactCountByCityOrState.get("Lucknow").equals(1)
 				&& contactCountByCityOrState.get("Mumbai").equals(1)
-				&& contactCountByCityOrState.get("Meerut").equals(1)
-				&& contactCountByCityOrState.get("Patna").equals(1)
+				&& contactCountByCityOrState.get("Meerut").equals(1) && contactCountByCityOrState.get("Patna").equals(1)
 				&& contactCountByCityOrState.get("Bihar").equals(1)
 				&& contactCountByCityOrState.get("Maharashtra").equals(1)
 				&& contactCountByCityOrState.get("Uttar Pradesh").equals(2));
+		log.info("Contact count by city or state tested successfully!");
+	}
+
+	// New contact added and check sync with DB
+	@Test
+	public void givenNewContact_WhenAdded_ShouldSyncWithDB() throws AddressBookSystemException {
+		AddressBookService addressBookService = new AddressBookService();
+		addressBookService.readDataFromDB();
+		LocalDate date = LocalDate.now();
+		addressBookService.addContactToDB("Sasuke", "Uchiha", "Mount Myoboku", "Konoha", "Land of Fire", 321456, 99966642l,
+				"sasukesclass@akatsuki.com", "Casual", "Friends", date);
+		boolean result = addressBookService.checkContactInfoSyncWithDB("Sasuke");
+		Assert.assertTrue(result);
+		log.info("Contact added to database should sync with databse tested succesfully!");
 	}
 
 }
