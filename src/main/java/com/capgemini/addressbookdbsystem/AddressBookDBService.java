@@ -1,6 +1,7 @@
 package com.capgemini.addressbookdbsystem;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -54,7 +55,8 @@ public class AddressBookDBService {
 	// Reading data from DB and returning contact list
 	public List<Contact> readDataFromDB() throws AddressBookSystemException {
 		String query = "select c.firstname, c.lastname,c.address,c.city,c.state,c.zip,"
-				+ "c.phone,c.email,c.addressbookname,a.type from contact c inner join addressbook a"
+				+ "c.phone,c.email,c.addressbookname,a.type"
+				+ " from contact c inner join addressbook a"
 				+ " on c.addressbookname=a.addressbookname";
 		return this.getContactByQuery(query);
 	}
@@ -85,6 +87,22 @@ public class AddressBookDBService {
 			throw new AddressBookSystemException("Error in getting contact by name");
 		}
 		return contactList;
+	}
+
+	// Retrieving contact by date
+	public List<Contact> getcontactDataByDate(LocalDate startDate, LocalDate endDate)
+			throws AddressBookSystemException {
+		String query = String.format("select c.firstname, c.lastname,c.address,c.city,"
+				+ "c.state,c.zip,c.phone,c.email,c.addressbookname,a.type"
+				+ " from contact c inner join addressbook a"
+				+ " on c.addressbookname=a.addressbookname"
+				+ " where dateadded between '%s' AND '%s'",
+				Date.valueOf(startDate), Date.valueOf(endDate));
+		try {
+			return this.getContactByQuery(query);
+		} catch (AddressBookSystemException e) {
+			throw new AddressBookSystemException("Error in getting contact by date range");
+		}
 	}
 
 	// Populating the contact object and adding to contact list

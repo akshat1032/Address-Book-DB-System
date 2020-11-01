@@ -1,5 +1,6 @@
 package com.capgemini.addressbooksystemdbtest;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -32,6 +33,19 @@ public class AddressBookSystemDBTest {
 		boolean result = addressBookService.checkContactInfoSyncWithDB("Mahesh");
 		Assert.assertTrue(result);
 		log.info("Update contact in sync with DB tested successfully!");
+	}
+	
+	
+	// Match contact count when retrieved for DB
+	@Test
+	public void contactsRetrievedForDateRange_MatchCount() throws AddressBookSystemException {
+		AddressBookService addressBookService = new AddressBookService();
+		addressBookService.readDataFromDB();
+		LocalDate startDate = LocalDate.of(2018, 01, 01);
+		LocalDate endDate = LocalDate.now();
+		List<Contact> contactList = addressBookService.readContactForDateRange(startDate, endDate);
+		Assert.assertEquals(2, contactList.size());
+		log.info("Retrieve contact for date range from DB count matched successfully!");
 	}
 
 }

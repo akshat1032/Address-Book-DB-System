@@ -1,5 +1,6 @@
 package com.capgemini.addressbookdbsystem;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -23,6 +24,11 @@ public class AddressBookService {
 	public List<Contact> readDataFromDB() throws AddressBookSystemException {
 		contactList = addressBookDBService.readDataFromDB();
 		return contactList;
+	}
+	
+	// Reading and returning list of contact for date range from DB
+	public List<Contact> readContactForDateRange(LocalDate startDate, LocalDate endDate) throws AddressBookSystemException {
+		return addressBookDBService.getcontactDataByDate(startDate,endDate);
 	}
 	
 	// Getting contact data from POJO class
