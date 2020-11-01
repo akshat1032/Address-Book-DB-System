@@ -22,5 +22,16 @@ public class AddressBookSystemDBTest {
 		Assert.assertEquals(3, contactList.size());
 		log.info("Entries from database count matched successfully!");
 	}
+	
+	// Update contact should sync with DB
+	@Test
+	public void contactUpdated_SyncWithDB() throws AddressBookSystemException {
+		AddressBookService addressBookService = new AddressBookService();
+		List<Contact> contactList = addressBookService.readDataFromDB();
+		addressBookService.updateContactToDatabase("Mahesh", "Danapur");
+		boolean result = addressBookService.checkContactInfoSyncWithDB("Mahesh");
+		Assert.assertTrue(result);
+		log.info("Update contact in sync with DB tested successfully!");
+	}
 
 }

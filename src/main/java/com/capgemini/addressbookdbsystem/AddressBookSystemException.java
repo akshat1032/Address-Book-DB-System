@@ -5,6 +5,4 @@ public class AddressBookSystemException extends Exception {
 	public AddressBookSystemException(String exceptionMessage) {
 		super(exceptionMessage);
 	}
-
-	
 }

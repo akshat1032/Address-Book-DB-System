@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 
 public class AddressBookDBService {
 
+	private PreparedStatement ContactDataStatement;
 	private static AddressBookDBService addressBookDBService;
 	private static Logger log = Logger.getLogger(AddressBookDBService.class.getName());
 
@@ -35,6 +36,21 @@ public class AddressBookDBService {
 		log.info("connection successful! " + connection);
 		return connection;
 	}
+
+	// Creating prepared statement for DB service
+	private void prepareStatementForContactData() throws AddressBookSystemException {
+		try {
+			Connection connection = addressBookDBService.getConnection();
+			String query = "select c.firstname, c.lastname,c.address,c.city,"
+					+ "c.state,c.zip,c.phone,c.email,c.addressbookname,a.type"
+					+ " from contact c inner join addressbook a"
+					+ " on c.addressbookname=a.addressbookname where firstname=?";
+			ContactDataStatement = connection.prepareStatement(query);
+		} catch (SQLException e) {
+			throw new AddressBookSystemException("Error in preparing statement");
+		}
+	}
+
 	// Reading data from DB and returning contact list
 	public List<Contact> readDataFromDB() throws AddressBookSystemException {
 		String query = "select c.firstname, c.lastname,c.address,c.city,c.state,c.zip,"
@@ -42,7 +58,7 @@ public class AddressBookDBService {
 				+ " on c.addressbookname=a.addressbookname";
 		return this.getContactByQuery(query);
 	}
-	
+
 	// Getting the data and returning contact list
 	private List<Contact> getContactByQuery(String query) throws AddressBookSystemException {
 		List<Contact> contactList = null;
@@ -55,28 +71,61 @@ public class AddressBookDBService {
 		}
 		return contactList;
 	}
-	
+
+	// Retrieving contact from DB using name
+	public List<Contact> getcontactDataByName(String name) throws AddressBookSystemException {
+		List<Contact> contactList = null;
+		if (this.ContactDataStatement == null)
+			this.prepareStatementForContactData();
+		try {
+			ContactDataStatement.setString(1, name);
+			ResultSet resultSet = ContactDataStatement.executeQuery();
+			contactList = this.getAddressBookData(resultSet);
+		} catch (SQLException e) {
+			throw new AddressBookSystemException("Error in getting contact by name");
+		}
+		return contactList;
+	}
+
 	// Populating the contact object and adding to contact list
 	private List<Contact> getAddressBookData(ResultSet resultSet) throws AddressBookSystemException {
 		List<Contact> contactList = new ArrayList<>();
 		try {
-		while(resultSet.next()) {
-			String firstName = resultSet.getString("firstname");
-			String lastName = resultSet.getString("lastname");
-			String address = resultSet.getString("address");
-			String city = resultSet.getString("city");
-			String state = resultSet.getString("state");
-			String zip = resultSet.getString("zip");
-			String phoneNumber = resultSet.getString("phone");
-			String email = resultSet.getString("email");
-			String addressBookName = resultSet.getString("addressbookname");
-			String addressBookType = resultSet.getString("type");
-			contactList.add(new Contact(firstName, lastName, address, city, state, zip, phoneNumber, email,
-					addressBookName, addressBookType));
+			while (resultSet.next()) {
+				String firstName = resultSet.getString("firstname");
+				String lastName = resultSet.getString("lastname");
+				String address = resultSet.getString("address");
+				String city = resultSet.getString("city");
+				String state = resultSet.getString("state");
+				String zip = resultSet.getString("zip");
+				String phoneNumber = resultSet.getString("phone");
+				String email = resultSet.getString("email");
+				String addressBookName = resultSet.getString("addressbookname");
+				String addressBookType = resultSet.getString("type");
+				contactList.add(new Contact(firstName, lastName, address, city, state, zip, phoneNumber, email,
+						addressBookName, addressBookType));
+			}
+		} catch (SQLException e) {
+			throw new AddressBookSystemException("Error in populating the contact object");
 		}
-	} catch (SQLException e) {
-		throw new AddressBookSystemException("Error in populating the contact object");
+		return contactList;
 	}
-	return contactList;
+
+	// Updating contact address by passing name and address
+	public int updateContactToDB(String name, String address) throws AddressBookSystemException {
+		return this.updateContactDataUsingPreparedStatement(name, address);
+	}
+
+	// Executing prepared statement to update contact in DB
+	private int updateContactDataUsingPreparedStatement(String name, String address) throws AddressBookSystemException {
+		try (Connection connection = addressBookDBService.getConnection();) {
+			String query = "update contact set address=? where firstname=?";
+			PreparedStatement preparedStatement = connection.prepareStatement(query);
+			preparedStatement.setString(1, address);
+			preparedStatement.setString(2, name);
+			return preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			throw new AddressBookSystemException("Error in updating contact using prepared statement");
+		}
 	}
 }
