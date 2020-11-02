@@ -197,16 +197,25 @@ public class AddressBookDBService {
 				throw new AddressBookSystemException("Error in inserting record to Contact table");
 			}
 		}
-//		Error in this part of the code : I want to check for duplicates before entry, gives exception
+		// Check for duplicates before entry
 		try {
 			Statement statement = connection.createStatement();
-			String query = String.format("insert into addressbook(addressbookname,type) VALUES ('%s','%s');",
-					addressBookName, addressBookType);
+			List<String> addressBookNameList = new ArrayList<>();
 			ResultSet resultSetAddressBook = statement.executeQuery("select * from addressbook");
-			String key = resultSetAddressBook.get("addressbookname");
-			System.out.println(key);
-			if (!key.contains(addressBookName))
+			while (resultSetAddressBook.next()) {
+				String primaryKey = resultSetAddressBook.getString("addressbookname");
+				addressBookNameList.add(primaryKey);
+			}
+			int duplicateCounter = 0;
+			for (String string : addressBookNameList) {
+				if (!string.equalsIgnoreCase(addressBookName))
+					duplicateCounter++;
+			}
+			if (duplicateCounter == 0) {
+				String query = String.format("insert into addressbook(addressbookname,type) VALUES ('%s','%s');",
+						addressBookName, addressBookType);
 				statement.executeUpdate(query);
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 			try {
