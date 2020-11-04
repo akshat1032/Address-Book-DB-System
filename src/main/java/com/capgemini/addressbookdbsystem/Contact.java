@@ -16,10 +16,11 @@ public class Contact {
 	public String addressBookName;
 	public String addressBookType;
 	public LocalDate dateAdded;
+	public int id;
 
 	// Adding all the contact information of contact table
-	public Contact(String firstName, String lastName, String address, String city, String state, long zip,
-			long phone, String email) {
+	public Contact(String firstName, String lastName, String address, String city, String state, long zip, long phone,
+			String email) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.address = address;
@@ -31,34 +32,38 @@ public class Contact {
 	}
 
 	// Adding the information into address book table
-	public Contact(String firstName, String lastName, String address, String city, String state, long zip,
-			long phone, String email, String addressBookName, String addressBookType) {
+	public Contact(String firstName, String lastName, String address, String city, String state, long zip, long phone,
+			String email, String addressBookName, String addressBookType) {
 		this(firstName, lastName, address, city, state, zip, phone, email);
 		this.addressBookName = addressBookName;
 		this.addressBookType = addressBookType;
 	}
-	
+
 	// Adding the information into updated address book and contact table
-	public Contact(String firstName, String lastName, String address, String city, String state, long zip,
-			long phone, String email, String addressBookName, String addressBookType, LocalDate dateAdded) {
-		this(firstName, lastName, address, city, state, zip, phone, email,addressBookName,addressBookType);
+	public Contact(String firstName, String lastName, String address, String city, String state, long zip, long phone,
+			String email, String addressBookName, String addressBookType, LocalDate dateAdded) {
+		this(firstName, lastName, address, city, state, zip, phone, email, addressBookName, addressBookType);
 		this.dateAdded = dateAdded;
+	}
+
+	public Contact(int id, String firstName, String lastName, String address, String city, String state, long zip,
+			long phone, String email, String addressBookName, String addressBookType, LocalDate dateAdded) {
+		this(firstName,lastName,address,city,state,zip,phone,email,addressBookName,addressBookType,dateAdded);
+		this.id = id;
 	}
 
 	@Override
 	public String toString() {
 		return "Contact [firstName=" + firstName + ", lastName=" + lastName + ", address=" + address + ", city=" + city
-				+ ", state=" + state + ", zip=" + zip + ", phone=" + phone + ", email=" + email
-				+ ", addressBookName=" + addressBookName + ", addressBookType=" + addressBookType + "]";
-	}
-	
-	@Override
-	public int hashCode() {
-		return Objects.hash(firstName, lastName, address, city, state, zip, phone, email, addressBookName,
-				dateAdded);
+				+ ", state=" + state + ", zip=" + zip + ", phone=" + phone + ", email=" + email + ", addressBookName="
+				+ addressBookName + ", addressBookType=" + addressBookType + "]";
 	}
 
-	
+	@Override
+	public int hashCode() {
+		return Objects.hash(firstName, lastName, address, city, state, zip, phone, email, addressBookName, dateAdded);
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o)

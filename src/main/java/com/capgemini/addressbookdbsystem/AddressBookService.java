@@ -1,6 +1,7 @@
 package com.capgemini.addressbookdbsystem;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,7 +9,7 @@ import java.util.logging.Logger;
 
 public class AddressBookService {
 
-	private static Logger log = Logger.getLogger(AddressBookService.class.getName());
+	public static Logger log = Logger.getLogger(AddressBookService.class.getName());
 
 	private List<Contact> contactList;
 	private Map<String, Integer> countByCityOrState;
@@ -19,8 +20,8 @@ public class AddressBookService {
 	}
 
 	public AddressBookService(List<Contact> contactList) {
-		this();
-		this.contactList = contactList;
+//		this();
+		this.contactList = new ArrayList<>(contactList);
 	}
 
 	// Reading and returning list of contact from DB
@@ -71,9 +72,9 @@ public class AddressBookService {
 				contactAdditionStatus.put(contactData.hashCode(), false);
 				log.info("Employee being added : " + Thread.currentThread().getName());
 				try {
-					this.addContactToDB(contactData.firstName, contactData.lastName, contactData.address, contactData.city,
-							contactData.state, contactData.zip, contactData.phone, contactData.email,
-							contactData.addressBookName,contactData.addressBookType, contactData.dateAdded);
+					this.addContactToDB(contactData.firstName, contactData.lastName, contactData.address,
+							contactData.city, contactData.state, contactData.zip, contactData.phone, contactData.email,
+							contactData.addressBookName, contactData.addressBookType, contactData.dateAdded);
 				} catch (AddressBookSystemException e) {
 					e.printStackTrace();
 				}
@@ -89,7 +90,7 @@ public class AddressBookService {
 			}
 		}
 	}
-
+	
 	// Getting contact data from POJO class
 	private Contact getContactData(String name) {
 		return this.contactList.stream().filter(contact -> contact.firstName.equals(name)).findFirst().orElse(null);
@@ -112,6 +113,10 @@ public class AddressBookService {
 	}
 
 	public long countEntries() {
-		return this.contactList.size();
+		return contactList.size();
+	}
+
+	public void addContactToJSONServer(Contact contactInfo) {
+		this.contactList.add(contactInfo);
 	}
 }
