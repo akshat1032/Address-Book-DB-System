@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.logging.Logger;
 
+import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -94,4 +95,21 @@ public class AddressBookSystemJSONServerTest {
 		addressBookService = new AddressBookService(Arrays.asList(contactArray));
 		Assert.assertEquals(6, addressBookService.countEntries());
 	}
+	
+	// Update contact to server and match status code
+//	@Test
+//	public void givenContact_WhenUpdated_MatchStatusCode() {
+//		AddressBookService addressBookService;
+//		Contact[] contactArray = getContactList();
+//		addressBookService = new AddressBookService(Arrays.asList(contactArray));
+//		addressBookService.updateContactDetailsForServer("Naurto", "Myoboku Mountain");
+//		Contact contact = addressBookService.getContactData("Naruto");
+//		String contactJson = new Gson().toJson(contact);
+//		RequestSpecification request = RestAssured.given();
+//		request.header("Content-Type", "application/json");
+//		request.body(contactJson);
+//		Response response = request.put("/contact/" + contact.firstName);
+//		int statusCode = response.getStatusCode();
+//		Assert.assertEquals(200, statusCode);
+//	}
 }

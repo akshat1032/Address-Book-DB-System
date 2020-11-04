@@ -90,9 +90,9 @@ public class AddressBookService {
 			}
 		}
 	}
-	
+
 	// Getting contact data from POJO class
-	private Contact getContactData(String name) {
+	public Contact getContactData(String name) {
 		return this.contactList.stream().filter(contact -> contact.firstName.equals(name)).findFirst().orElse(null);
 	}
 
@@ -120,5 +120,12 @@ public class AddressBookService {
 	// Adding contact to the list
 	public void addContactToJSONServer(Contact contactInfo) {
 		this.contactList.add(contactInfo);
+	}
+	
+	// Update contact details for server data
+	public void updateContactDetailsForServer(String firstName, String address) {
+		Contact contact = this.getContactData(firstName);
+		if(contact != null)
+			contact.address = address;
 	}
 }
