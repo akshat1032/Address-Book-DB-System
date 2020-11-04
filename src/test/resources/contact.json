@@ -53,6 +53,60 @@
         "day": 4
       },
       "id": 3
+    },
+    {
+      "firstName": "Kiba",
+      "lastName": "Inuzuka",
+      "address": "Inuzuka Clan House",
+      "city": "Konohagakure",
+      "state": "Land of Fire",
+      "zip": 112345,
+      "phone": 777856,
+      "email": "kibaakamaru@gmail.com",
+      "addressBookName": "Casual",
+      "addressBookType": "Friends",
+      "dateAdded": {
+        "year": 2020,
+        "month": 11,
+        "day": 4
+      },
+      "id": 4
+    },
+    {
+      "firstName": "Gaara",
+      "lastName": "Of The Sand",
+      "address": "Kazekage house",
+      "city": "Sunagakure",
+      "state": "Land of Wind",
+      "zip": 111222,
+      "phone": 6547894,
+      "email": "gaara_shukaku@magnetsand.com",
+      "addressBookName": "Personal",
+      "addressBookType": "VIP",
+      "dateAdded": {
+        "year": 2020,
+        "month": 11,
+        "day": 4
+      },
+      "id": 5
+    },
+    {
+      "firstName": "Shikamaru",
+      "lastName": "Nara",
+      "address": "Nara House",
+      "city": "Konohagakure",
+      "state": "Land of Fire",
+      "zip": 333666,
+      "phone": 9874563,
+      "email": "shadowmaster_lazy@nara.com",
+      "addressBookName": "Casual",
+      "addressBookType": "Friends",
+      "dateAdded": {
+        "year": 2020,
+        "month": 11,
+        "day": 4
+      },
+      "id": 6
     }
   ]
 }

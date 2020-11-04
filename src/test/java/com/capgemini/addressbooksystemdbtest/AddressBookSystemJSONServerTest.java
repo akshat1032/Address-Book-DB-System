@@ -27,6 +27,7 @@ public class AddressBookSystemJSONServerTest {
 		RestAssured.port = 3000;
 	}
 
+	// Getting contact from server
 	public static Contact[] getContactList() {
 		Response response = RestAssured.get("/contact");
 		AddressBookService.log.info("Contact in server :\n" + response.asString());
@@ -34,6 +35,7 @@ public class AddressBookSystemJSONServerTest {
 		return arrayOfContacts;
 	}
 
+	// Posting contact to server and returning response
 	public Response addContactToJsonServer(Contact contactData) {
 		String contactJson = new Gson().toJson(contactData);
 		RequestSpecification request = RestAssured.given();
@@ -42,6 +44,7 @@ public class AddressBookSystemJSONServerTest {
 		return request.post("/contact");
 	}
 
+	// Adding new contact to server and populating object
 	@Test
 	public void givenNewContact_WhenAdded_MatchCount() throws AddressBookSystemException {
 		AddressBookService addressBookService;
@@ -59,11 +62,36 @@ public class AddressBookSystemJSONServerTest {
 		Assert.assertEquals(3, entries);
 	}
 	
+	// Adding multiple contact to server and matching status code and count
+	@Test
+	public void givenListOfContacts_WhenAdded_MatchCount() {
+		AddressBookService addressBookService;
+		Contact[] contactArray = getContactList();
+		addressBookService = new AddressBookService(Arrays.asList(contactArray));
+		Contact[] contactArrays = {
+				new Contact(4,"Kiba", "Inuzuka", "Inuzuka Clan House", "Konohagakure", "Land of Fire", 112345, 777856, "kibaakamaru@gmail.com",
+						"Casual", "Friends", LocalDate.now()),
+				new Contact(5,"Gaara", "Of The Sand", "Kazekage house", "Sunagakure", "Land of Wind", 111222, 6547894, "gaara_shukaku@magnetsand.com",
+						"Personal", "VIP", LocalDate.now()),
+				new Contact(6,"Shikamaru", "Nara", "Nara House", "Konohagakure", "Land of Fire", 333666, 9874563, "shadowmaster_lazy@nara.com",
+						"Casual", "Friends", LocalDate.now())};
+		for (Contact contact : contactArrays) {
+			Response response = addContactToJsonServer(contact);
+			int statusCode = response.getStatusCode();
+			Assert.assertEquals(201, statusCode);
+			contact = new Gson().fromJson(response.asString(), Contact.class);
+			addressBookService.addContactToJSONServer(contact);
+		}
+		long entries = addressBookService.countEntries();
+		Assert.assertEquals(6, entries);
+	}
+	
+	// Retrieving contact from server and matching count
 	@Test
 	public void givenContactInJsonServer_WhenRetrived_MatchCount() {
 		Contact[] contactArray = getContactList();
 		AddressBookService addressBookService;
 		addressBookService = new AddressBookService(Arrays.asList(contactArray));
-		Assert.assertEquals(3, addressBookService.countEntries());
+		Assert.assertEquals(6, addressBookService.countEntries());
 	}
 }

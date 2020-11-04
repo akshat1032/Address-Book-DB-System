@@ -112,10 +112,12 @@ public class AddressBookService {
 		return contactList.get(0).equals(getContactData(name));
 	}
 
+	// Returning no of entries
 	public long countEntries() {
 		return contactList.size();
 	}
 
+	// Adding contact to the list
 	public void addContactToJSONServer(Contact contactInfo) {
 		this.contactList.add(contactInfo);
 	}
