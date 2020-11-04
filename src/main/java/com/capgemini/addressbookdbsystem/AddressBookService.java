@@ -43,10 +43,51 @@ public class AddressBookService {
 
 	// Adding contact to DB
 	public void addContactToDB(String firstName, String lastName, String address, String city, String state, long zip,
-			long phone, String email, String addressBookName, String addressBookType, LocalDate dateAdded) throws AddressBookSystemException {
+			long phone, String email, String addressBookName, String addressBookType, LocalDate dateAdded)
+			throws AddressBookSystemException {
 		this.contactList.add(addressBookDBService.addContactToDb(firstName, lastName, address, city, state, zip, phone,
 				email, addressBookName, addressBookType, dateAdded));
 
+	}
+
+	// Adding multiple contact to DB
+	public void addMultipleContactToDB(List<Contact> contactList) {
+		contactList.forEach(contactData -> {
+			try {
+				this.addContactToDB(contactData.firstName, contactData.lastName, contactData.address, contactData.city,
+						contactData.state, contactData.zip, contactData.phone, contactData.email,
+						contactData.addressBookName, contactData.addressBookType, contactData.dateAdded);
+			} catch (AddressBookSystemException e) {
+				e.printStackTrace();
+			}
+		});
+	}
+
+	// Adding multiple contact to DB using threads
+	public void addMultipleContactToDBUsingThreads(List<Contact> contactList) {
+		Map<Integer, Boolean> contactAdditionStatus = new HashMap<>();
+		contactList.forEach(contactData -> {
+			Runnable task = () -> {
+				contactAdditionStatus.put(contactData.hashCode(), false);
+				log.info("Employee being added : " + Thread.currentThread().getName());
+				try {
+					this.addContactToDB(contactData.firstName, contactData.lastName, contactData.address, contactData.city,
+							contactData.state, contactData.zip, contactData.phone, contactData.email,
+							contactData.addressBookName,contactData.addressBookType, contactData.dateAdded);
+				} catch (AddressBookSystemException e) {
+					e.printStackTrace();
+				}
+				contactAdditionStatus.put(contactData.hashCode(), true);
+			};
+			Thread thread = new Thread(task, contactData.firstName);
+			thread.start();
+		});
+		while (contactAdditionStatus.containsValue(false)) {
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+			}
+		}
 	}
 
 	// Getting contact data from POJO class
@@ -68,5 +109,9 @@ public class AddressBookService {
 	public boolean checkContactInfoSyncWithDB(String name) throws AddressBookSystemException {
 		List<Contact> contactList = addressBookDBService.getcontactDataByName(name);
 		return contactList.get(0).equals(getContactData(name));
+	}
+
+	public long countEntries() {
+		return this.contactList.size();
 	}
 }

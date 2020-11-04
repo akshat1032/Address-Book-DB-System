@@ -1,6 +1,7 @@
 package com.capgemini.addressbookdbsystem;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class Contact {
 
@@ -50,6 +51,13 @@ public class Contact {
 				+ ", state=" + state + ", zip=" + zip + ", phone=" + phone + ", email=" + email
 				+ ", addressBookName=" + addressBookName + ", addressBookType=" + addressBookType + "]";
 	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(firstName, lastName, address, city, state, zip, phone, email, addressBookName,
+				dateAdded);
+	}
+
 	
 	@Override
 	public boolean equals(Object o) {
