@@ -60,7 +60,7 @@ public class AddressBookSystemJSONServerTest {
 		contactInfo = new Gson().fromJson(response.asString(), Contact.class);
 		addressBookService.addContactToJSONServer(contactInfo);
 		long entries = addressBookService.countEntries();
-		Assert.assertEquals(3, entries);
+		Assert.assertEquals(2, entries);
 	}
 	
 	// Adding multiple contact to server and matching status code and count
@@ -84,7 +84,7 @@ public class AddressBookSystemJSONServerTest {
 			addressBookService.addContactToJSONServer(contact);
 		}
 		long entries = addressBookService.countEntries();
-		Assert.assertEquals(6, entries);
+		Assert.assertEquals(5, entries);
 	}
 	
 	// Retrieving contact from server and matching count
@@ -93,7 +93,7 @@ public class AddressBookSystemJSONServerTest {
 		Contact[] contactArray = getContactList();
 		AddressBookService addressBookService;
 		addressBookService = new AddressBookService(Arrays.asList(contactArray));
-		Assert.assertEquals(6, addressBookService.countEntries());
+		Assert.assertEquals(5, addressBookService.countEntries());
 	}
 	
 	// Update contact to server and match status code
@@ -112,4 +112,21 @@ public class AddressBookSystemJSONServerTest {
 //		int statusCode = response.getStatusCode();
 //		Assert.assertEquals(200, statusCode);
 //	}
+	
+	// Delete contact from server by name
+	@Test
+	public void givenContactName_WhenDeleted_MatchStatusCodeAndCount() {
+		AddressBookService addressBookService;
+		Contact[] contactArray = getContactList();
+		addressBookService = new AddressBookService(Arrays.asList(contactArray));
+		Contact contact = addressBookService.getContactData("Killer");
+		RequestSpecification request = RestAssured.given();
+		request.header("Content-Type", "application/json");
+		Response response = request.delete("/contact/" + contact.id);
+		int statusCode = response.getStatusCode();
+		Assert.assertEquals(200, statusCode);
+		addressBookService.deleteContactFromServer(contact.firstName);
+		long entries = addressBookService.countEntries();
+		Assert.assertEquals(4, entries);
+	}
 }

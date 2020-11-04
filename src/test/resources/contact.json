@@ -1,42 +1,6 @@
 {
   "contact": [
     {
-      "id": 1,
-      "firstName": "Killer",
-      "lastName": "B",
-      "address": "Under waterfall",
-      "city": "Kumogakure",
-      "state": "Land of Lightning",
-      "zip": 321456,
-      "phone": 9996663,
-      "email": "killergyuki@gmail.com",
-      "addressBookName": "Personal",
-      "addressBookType": "Family",
-      "dateAdded": {
-        "year": 2020,
-        "month": 11,
-        "day": 4
-      }
-    },
-    {
-      "id": 2,
-      "firstName": "Naruto",
-      "lastName": "Uzumaki",
-      "address": "Hokage office",
-      "city": "Konohagakure",
-      "state": "Land of Fire",
-      "zip": 123111,
-      "phone": 1112223,
-      "email": "naru_kyubi9@hokage.com",
-      "addressBookName": "Casual",
-      "addressBookType": "VIP",
-      "dateAdded": {
-        "year": 2020,
-        "month": 11,
-        "day": 4
-      }
-    },
-    {
       "firstName": "Ramesh",
       "lastName": "Kumar",
       "address": "Kankarbagh",

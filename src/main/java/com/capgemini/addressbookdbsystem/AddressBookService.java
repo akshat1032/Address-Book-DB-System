@@ -121,11 +121,18 @@ public class AddressBookService {
 	public void addContactToJSONServer(Contact contactInfo) {
 		this.contactList.add(contactInfo);
 	}
-	
+
 	// Update contact details for server data
 	public void updateContactDetailsForServer(String firstName, String address) {
 		Contact contact = this.getContactData(firstName);
-		if(contact != null)
+		if (contact != null)
 			contact.address = address;
+	}
+	
+	// Deleting a contact by name from server record
+	public void deleteContactFromServer(String firstName) {
+		Contact contact = this.getContactData(firstName);
+		contactList.remove(contact);
+
 	}
 }
