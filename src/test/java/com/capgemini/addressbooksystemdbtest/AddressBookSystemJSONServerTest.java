@@ -96,37 +96,21 @@ public class AddressBookSystemJSONServerTest {
 		Assert.assertEquals(5, addressBookService.countEntries());
 	}
 	
-	// Update contact to server and match status code
-//	@Test
-//	public void givenContact_WhenUpdated_MatchStatusCode() {
-//		AddressBookService addressBookService;
-//		Contact[] contactArray = getContactList();
-//		addressBookService = new AddressBookService(Arrays.asList(contactArray));
-//		addressBookService.updateContactDetailsForServer("Naurto", "Myoboku Mountain");
-//		Contact contact = addressBookService.getContactData("Naruto");
-//		String contactJson = new Gson().toJson(contact);
-//		RequestSpecification request = RestAssured.given();
-//		request.header("Content-Type", "application/json");
-//		request.body(contactJson);
-//		Response response = request.put("/contact/" + contact.firstName);
-//		int statusCode = response.getStatusCode();
-//		Assert.assertEquals(200, statusCode);
-//	}
-	
-	// Delete contact from server by name
 	@Test
-	public void givenContactName_WhenDeleted_MatchStatusCodeAndCount() {
+	public void givenContact_WhenUpdated_MatchStatusCode() {
 		AddressBookService addressBookService;
 		Contact[] contactArray = getContactList();
 		addressBookService = new AddressBookService(Arrays.asList(contactArray));
-		Contact contact = addressBookService.getContactData("Killer");
+		addressBookService.updateContactDetailsForServer("Naruto", "Myoboku Mountain");
+		Contact contact = addressBookService.getContactData("Naruto");
 		RequestSpecification request = RestAssured.given();
+		JSONObject reqObj = new JSONObject();
+		reqObj.put("address", "Mount Myoboku");
 		request.header("Content-Type", "application/json");
-		Response response = request.delete("/contact/" + contact.id);
+		request.body(reqObj.toString());
+		Response response = request.put("/contact/" + contact.id);
 		int statusCode = response.getStatusCode();
+		System.out.println(statusCode);
 		Assert.assertEquals(200, statusCode);
-		addressBookService.deleteContactFromServer(contact.firstName);
-		long entries = addressBookService.countEntries();
-		Assert.assertEquals(4, entries);
 	}
 }
