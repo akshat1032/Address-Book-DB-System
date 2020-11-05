@@ -19,57 +19,15 @@
       }
     },
     {
-      "id": 2,
-      "firstName": "Naruto",
-      "lastName": "Uzumaki",
-      "address": "Hokage office",
-      "city": "Konohagakure",
-      "state": "Land of Fire",
-      "zip": 123111,
-      "phone": 1112223,
-      "email": "naru_kyubi9@hokage.com",
-      "addressBookName": "Casual",
-      "addressBookType": "VIP",
-      "dateAdded": {
-        "year": 2020,
-        "month": 11,
-        "day": 4
-      }
+      "address": "Mount Myoboku",
+      "id": 2
     },
     {
-      "firstName": "Ramesh",
-      "lastName": "Kumar",
-      "address": "Kankarbagh",
-      "city": "Patna",
-      "state": "Bihar",
-      "zip": 800006,
-      "phone": 9874563,
-      "email": "Ramesh.kumar@gmail.com",
-      "addressBookName": "Personal",
-      "addressBookType": "Family",
-      "dateAdded": {
-        "year": 2020,
-        "month": 11,
-        "day": 5
-      },
+      "address": "Mount",
       "id": 3
     },
     {
-      "firstName": "Kiba",
-      "lastName": "Inuzuka",
-      "address": "Inuzuka Clan House",
-      "city": "Konohagakure",
-      "state": "Land of Fire",
-      "zip": 112345,
-      "phone": 777856,
-      "email": "kibaakamaru@gmail.com",
-      "addressBookName": "Casual",
-      "addressBookType": "Friends",
-      "dateAdded": {
-        "year": 2020,
-        "month": 11,
-        "day": 5
-      },
+      "address": "Konoha",
       "id": 4
     },
     {

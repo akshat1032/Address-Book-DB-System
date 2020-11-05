@@ -97,19 +97,21 @@ public class AddressBookSystemJSONServerTest {
 	}
 	
 	// Update contact to server and match status code
-//	@Test
-//	public void givenContact_WhenUpdated_MatchStatusCode() {
-//		AddressBookService addressBookService;
-//		Contact[] contactArray = getContactList();
-//		addressBookService = new AddressBookService(Arrays.asList(contactArray));
-//		addressBookService.updateContactDetailsForServer("Naurto", "Myoboku Mountain");
-//		Contact contact = addressBookService.getContactData("Naruto");
-//		String contactJson = new Gson().toJson(contact);
-//		RequestSpecification request = RestAssured.given();
-//		request.header("Content-Type", "application/json");
-//		request.body(contactJson);
-//		Response response = request.put("/contact/" + contact.firstName);
-//		int statusCode = response.getStatusCode();
-//		Assert.assertEquals(200, statusCode);
-//	}
+	@Test
+	public void givenContact_WhenUpdated_MatchStatusCode() {
+		AddressBookService addressBookService;
+		Contact[] contactArray = getContactList();
+		addressBookService = new AddressBookService(Arrays.asList(contactArray));
+		addressBookService.updateContactDetailsForServer("Naruto", "Myoboku Mountain");
+		Contact contact = addressBookService.getContactData("Naruto");
+		RequestSpecification request = RestAssured.given();
+		JSONObject reqObj = new JSONObject();
+		reqObj.put("address", "Mount Myoboku");
+		request.header("Content-Type", "application/json");
+		request.body(reqObj.toString());
+		Response response = request.put("/contact/" + contact.id);
+		int statusCode = response.getStatusCode();
+		System.out.println(statusCode);
+		Assert.assertEquals(200, statusCode);
+	}
 }
